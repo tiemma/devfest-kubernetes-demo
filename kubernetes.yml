@@ -1,0 +1,48 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-service
+  namespace: helloWorld
+spec:
+  selector:
+    run: hello-deployment
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+    name: http
+  type: LoadBalancer
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-deployment
+  namespace: helloWorld
+spec:
+  selector:
+    matchLabels:
+      run: hello-deployment
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        run: hello-deployment
+    spec:
+      containers:
+      - name: session
+        image: tiemma/session:0.0.1-SNAPSHOT
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: KEY
+          value: "VALUE"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+            storage: 1Gi
+        ports:
+        - containerPort: 8080
+

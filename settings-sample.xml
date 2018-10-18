@@ -1,0 +1,5 @@
+<server>
+    <id>docker.io</id>
+    <username>username</username>
+    <password>password</password>
+</server>
