@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: random-service
+  namespace: random-namespace
+spec:
+  selector:
+    run: random-deployment
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+    name: http
+  type: LoadBalancer

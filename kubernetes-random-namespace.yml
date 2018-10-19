@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: random-namespace
+  labels:
+    name: random-namespace
+
