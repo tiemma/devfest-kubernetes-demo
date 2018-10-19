@@ -1,25 +1,29 @@
-install: 
-	bash set-up-env-minikube.sh install-minikube-and-start
-
-run: install-minikube
-
-delete: 
-	delete
-
-enable-ingress: 
-	enable-addons
-
-build-image: 
-	build-image
-
-deploy-config: 
-	deploy
-
-add-host: 
-	add-to-hosts
+SHELL := /bin/bash 
 
 .PHONY: list
 
 list:
+	echo -e "\n\nSpecify a command: install-and-run, run, delete-namespace, enable-ingress, build-image, deploy-k8s-config, add-hosts"
 
-    @$(MAKE) -pRrq -f $(lastword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$' | xargs	
+install-and-run: 
+	bash set-up-env-minikube.sh install_and_start
+
+run: install-and-run
+
+update:
+	bash set-up-env-minikube.sh update_configs
+
+delete-namespace: 
+	bash set-up-env-minikube.sh delete
+
+enable-ingress: 
+	bash set-up-env-minikube.sh enable_addons
+
+build-image: 
+	bash set-up-env-minikube.sh build_image
+
+deploy-k8s-config: 
+	bash set-up-env-minikube.sh deploy
+
+add-hosts: 
+	bash set-up-env-minikube.sh add_to_hosts
