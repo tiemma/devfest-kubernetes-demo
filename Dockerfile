@@ -1,5 +1,6 @@
-FROM openjdk:8-jdk-alpine
-VOLUME /tmp
-COPY target/session-0.0.1-SNAPSHOT.jar app.jar
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
-EXPOSE 8080
+FROM node:alpine
+COPY kafka-websockets-node/dist dist/
+WORKDIR dist
+RUN npm install
+ENTRYPOINT ["npm","start"]
+EXPOSE 3000
