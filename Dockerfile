@@ -1,6 +1,6 @@
-FROM node:alpine
-COPY kafka-websockets-node/dist dist/
-WORKDIR dist
+FROM node:8-alpine
+COPY node-demo/index.js node-demo/package.json dist/
+WORKDIR dist/
 RUN npm install
-ENTRYPOINT ["npm","start"]
+CMD npm start
 EXPOSE 3000
