@@ -107,6 +107,12 @@ watch_deployment(){
     minikube service random-service --namespace=random-service
 }
 
+correct_ingress_controller(){
+    POD_NAMESPACE="kube-system"
+    POD_NAME=$(kubectl get pods -n kube-system -l addonmanager.kubernetes.io/mode=Reconcile,app=nginx-ingress-controller -o jsonpath='{.items[0].metadata.name}')
+    kubectl exec -it $POD_NAME -n $POD_NAMESPACE -- /nginx-ingress-controller  --default-backend-service=default-http-backend --enable-dynamic-configuration=true
+}
+
 if [[ -z "$1" ]]; then
     echo_with_decorators "Kindly use the Makefile to access commands here, Thanks :-)"
 else
