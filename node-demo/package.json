@@ -1,0 +1,29 @@
+{
+  "name": "node-demo",
+  "version": "1.0.0",
+  "description": "Basic web server to explain deploying applications on Kubernetes",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tiemma/kafka-websockets-node.git"
+  },
+  "keywords": [
+    "js",
+    "docker",
+    "kubernetes"
+  ],
+  "author": "Bakare Emmanuel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tiemma/kafka-websockets-node/issues"
+  },
+  "homepage": "https://github.com/Tiemma/kafka-websockets-node#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^1.7.3"
+  }
+}

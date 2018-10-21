@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: random-deployment
+  namespace: random-namespace
+spec:
+  selector:
+    matchLabels:
+      run: random-deployment
+  replicas: 4
+  strategy: 
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        run: random-deployment
+    spec:
+      containers:
+      - name: kube-demo
+        image: node-demo
+        imagePullPolicy: IfNotPresent    
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: liveness-port
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+          periodSeconds: 15
+        livenessProbe:
+          tcpSocket:
+            port: liveness-port
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+          periodSeconds: 15
+        env:
+        - name: KEY
+          valueFrom:
+            configMapKeyRef:
+              name: random-config
+              key: KEY
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - name: liveness-port
+          containerPort: 3000
