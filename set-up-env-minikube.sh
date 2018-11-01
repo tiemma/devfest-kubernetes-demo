@@ -28,7 +28,7 @@ install_minikube(){
 
 install_helm(){
     curl -L https://github.com/helm/helm/archive/v2.11.0.tar.gz  -c -x 10 -s 10 -j 10 -o /tmp/helm.tar.gz 
-    sudo chmod +x /tmp/minikube
+    sudo tar -xvzf /tmp/helm.tar.gz -C /tmp
     #Just incase local/bin is not in your path
     export PATH=$PATH:$HOME/.local/bin
     cp /tmp/minikube ~/.local/bin/minikube
