@@ -1,32 +1,3 @@
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: random-ingress-deployment
-#   namespace: random-namespace
-# spec:
-#   selector:
-#     matchLabels:
-#       run: random-ingress-deployment
-#   template:
-#     metadata:
-#       labels:
-#         run: random-ingress-deployment
-#     spec:
-#       containers:
-#         - name: random-ingress-deployment
-#           image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.20.0
-#           imagePullPolicy: IfNotPresent    
-#           args:
-#           - /nginx-ingress-controller
-#           - --ingress-class=class-1
-#           - --default-backend-service=$(POD_NAMESPACE)/default-http-backend
-#           - --configmap=$(POD_NAMESPACE)/nginx-configuration
-#           - --tcp-services-configmap=$(POD_NAMESPACE)/tcp-services
-#           - --udp-services-configmap=$(POD_NAMESPACE)/udp-services
-#           - --publish-service=$(POD_NAMESPACE)/ingress-nginx
-#           - --enable-dynamic-configuration=true
-#           - --sort-backends=true
-# ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -43,7 +14,7 @@ metadata:
     # nginx.ingress.kubernetes.io/proxy-stream-timeout: "36000000"
     # nginx.ingress.kubernetes.io/upstream-keepalive-timeout: "36000000"
     # nginx.org/websocket-services: random-service
-    kubernetes.io/ingress.class: nginx
+    # kubernetes.io/ingress.class: nginx
 spec:
   backend:
     serviceName: default-http-backend

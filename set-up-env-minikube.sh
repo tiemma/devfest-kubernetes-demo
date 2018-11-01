@@ -5,9 +5,11 @@ run(){
     minikube start
     delete
     enable_addons
+    setup_env
     build_image
     deploy
     open_service
+    watch_deployment
 }
 
 install_kubectl(){
@@ -31,7 +33,7 @@ install_helm(){
     sudo tar -xvzf /tmp/helm.tar.gz -C /tmp
     #Just incase local/bin is not in your path
     export PATH=$PATH:$HOME/.local/bin
-    cp /tmp/minikube ~/.local/bin/minikube
+    cp -Rv /tmp/linux-amd64/{tiller,helm} ~/.local/bin
 }
 
 install_and_start() {

@@ -3,7 +3,7 @@ SHELL := /bin/bash
 .PHONY: list
 
 list:
-	echo -e "\n\nSpecify a command: install-and-run, run, delete-namespace, enable-ingress, build-image, deploy-k8s-config, add-hosts"
+	echo -e "\n\nSpecify a command: install-and-run, run, delete-namespace, enable-ingress, build-image, deploy-k8s-config, add-hosts, setup_env"
 
 install-and-run: 
 	bash set-up-env-minikube.sh install_and_start
