@@ -26,6 +26,14 @@ install_minikube(){
     cp /tmp/minikube ~/.local/bin/minikube
 }
 
+install_helm(){
+    curl -L https://github.com/helm/helm/archive/v2.11.0.tar.gz  -c -x 10 -s 10 -j 10 -o /tmp/helm.tar.gz 
+    sudo chmod +x /tmp/minikube
+    #Just incase local/bin is not in your path
+    export PATH=$PATH:$HOME/.local/bin
+    cp /tmp/minikube ~/.local/bin/minikube
+}
+
 install_and_start() {
     if hash minikube 2>/dev/null; then
         echo_with_decorators "Minikube is installed"
@@ -59,27 +67,31 @@ enable_addons(){
     minikube addons enable ingress
 }
 
-build_image(){
+setup_env(){
     #We need to switch over to the minikube docker client
     echo_with_decorators "Here we want to make sure that our docker builds go to kubernetes so we switch docker clients"
     DOCKER_SETUP_K8S=$(minikube docker-env)
     echo_with_decorators "Here's what makes that happen:"
     echo_with_decorators "$DOCKER_SETUP_K8S"
     eval $DOCKER_SETUP_K8S
+}
 
+build_image(){
+    setup_env
     echo_with_decorators "Now we're gonna build the test node-demo app"
     docker build -t node-demo .
 }
 
 deploy(){
     echo_with_decorators "Now we run through all the config files we have in the order specified"
-    echo_with_decorators "namespace -> configmap  -> deployment -> service -> ingress"
-    for f in *{namespace,config,deployment,service,ingress}*; do kubectl create -f  $f; done 
+    echo_with_decorators "namespace -> configmap  -> controller -> default-http -> deployment -> service -> ingress"
+    for f in *{namespace,config,deployment,service,ingress}*; do kubectl create --save-config -f  $f; done 
+    # kubectl expose deployment default-http-backend --namespace=ingress-nginx
 }
 
 update_configs(){
     echo_with_decorators "Let's update out configs again"
-    echo_with_decorators "NO Order is required here: namespace -> configmap  -> deployment -> service -> ingress"
+    echo_with_decorators "NO Order is required here: namespace -> configmap -> deployment -> service -> ingress"
     kubectl apply -f .
 }
 

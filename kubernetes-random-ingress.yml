@@ -37,9 +37,13 @@ metadata:
     #Configurations are available here:
     #https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
     #https://kubernetes.github.io/ingress-nginx/user-guide/miscellaneous/
-    nginx.ingress.kubernetes.io/worker-shutdown-timeout: "3600"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    # nginx.ingress.kubernetes.io/worker-shutdown-timeout: 3600000s
+    # nginx.ingress.kubernetes.io/proxy-send-timeout: "36000000"
+    # nginx.ingress.kubernetes.io/proxy-read-timeout: "36000000"
+    # nginx.ingress.kubernetes.io/proxy-stream-timeout: "36000000"
+    # nginx.ingress.kubernetes.io/upstream-keepalive-timeout: "36000000"
+    # nginx.org/websocket-services: random-service
+    kubernetes.io/ingress.class: nginx
 spec:
   backend:
     serviceName: default-http-backend

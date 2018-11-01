@@ -10,6 +10,9 @@ install-and-run:
 
 run: install-and-run
 
+setup_env:
+		bash set-up-env-minikube.sh setup_env
+
 update:
 	bash set-up-env-minikube.sh update_configs
 
