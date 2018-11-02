@@ -76,7 +76,7 @@ If you don't have docker installed, you can run this:
 ### Kubernetes Configuration
 ---
 
- All these files start with the kubernetes prefix for ease of accessibility.
+ All these files start with the "*kubernetes-*" prefix for ease of accessibility.
 
 You can go through the configuration defined there and apply it using the following configuration
 
