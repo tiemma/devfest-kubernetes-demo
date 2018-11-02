@@ -8,11 +8,15 @@ run(){
     setup_env
     build_image
     deploy
-    open_service
+    add_to_hosts
+    open_dashboard
+    #open_service
     watch_deployment
+    open_service_ingress_url
 }
 
 install_kubectl(){
+    echo_with_decorators "Installing kubectl"
     sudo apt-get update && sudo apt-get install -y apt-transport-https
     curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
     echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
@@ -21,7 +25,9 @@ install_kubectl(){
 }
 
 install_minikube(){
-    curl -L https://github.com/kubernetes/minikube/releases/download/v0.28.0/minikube-linux-amd64 -c -x 10 -s 10 -j 10 -o /tmp/minikube
+    echo_with_decorators "Installing Minikube"
+    rm /tmp/minikube
+    curl -L  https://storage.googleapis.com/minikube/releases/v0.30.0/minikube-linux-amd64 -c -x 10 -s 10 -j 10 -o /tmp/minikube 
     sudo chmod +x /tmp/minikube
     #Just incase local/bin is not in your path
     export PATH=$PATH:$HOME/.local/bin
@@ -29,7 +35,7 @@ install_minikube(){
 }
 
 install_helm(){
-    curl -L https://github.com/helm/helm/archive/v2.11.0.tar.gz  -c -x 10 -s 10 -j 10 -o /tmp/helm.tar.gz 
+    curl -L https://github.com/helm/helm/archive/v2.11.0.tar.gz  -c -x 10 -s 10 -j 10 -ov /tmp/helm.tar.gz 
     sudo tar -xvzf /tmp/helm.tar.gz -C /tmp
     #Just incase local/bin is not in your path
     export PATH=$PATH:$HOME/.local/bin
@@ -40,13 +46,13 @@ install_and_start() {
     if hash minikube 2>/dev/null; then
         echo_with_decorators "Minikube is installed"
     else
-        install-minikube
+        install_minikube
     fi
 
     if hash kubectl 2>/dev/null; then
         echo_with_decorators "Kubectl is installed"
     else
-        install-kubectl
+        install_kubectl
     fi
 
     run
@@ -64,6 +70,17 @@ delete(){
     kubectl delete namespace random-namespace
 }
 
+open_dashboard(){
+    echo_with_decorators "Now let's open the dashboard in our browser"
+    nohup kubectl proxy &
+    sleep 5 && xdg-open http://localhost:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/#!/overview?namespace=random-namespace
+}
+
+open_service_ingress_url(){
+    echo_with_decorators "Since you've noticed the status change to running and closed the other window, we can then open the url"
+    xdg-open "http://random.demo"
+}
+
 enable_addons(){
     echo_with_decorators "Enabling ingress setup to allow local load balancer use"
     minikube addons enable ingress
@@ -79,14 +96,13 @@ setup_env(){
 }
 
 build_image(){
-    setup_env
     echo_with_decorators "Now we're gonna build the test node-demo app"
     docker build -t node-demo .
 }
 
 deploy(){
     echo_with_decorators "Now we run through all the config files we have in the order specified"
-    echo_with_decorators "namespace -> configmap  -> controller -> default-http -> deployment -> service -> ingress"
+    echo_with_decorators "namespace -> configmap -> deployment -> service -> ingress"
     for f in *{namespace,config,deployment,service,ingress}*; do kubectl create --save-config -f  $f; done 
     # kubectl expose deployment default-http-backend --namespace=ingress-nginx
 }
@@ -115,10 +131,9 @@ open_service(){
 }
 
 watch_deployment(){
-    echo_with_decorators "Now let's watch the deployments startup"
-    xterm -fa 'Monospace' -fs 10 -bg white -fg black -e "watch kubectl describe pod random-deployment --namespace=random-namespace"
+    echo_with_decorators "Now let's watch the deployments startup, wait until you see the Status change to Running"
+    xterm -maximized -fa 'Monospace' -fs 10 -bg white -fg black -e "watch kubectl describe pod random-deployment --namespace=random-namespace"
     echo_with_decorators "Now that you've seen it start successfully, let's try to open the service again"
-    minikube service random-service --namespace=random-service
 }
 
 correct_ingress_controller(){
