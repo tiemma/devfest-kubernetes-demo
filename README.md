@@ -103,7 +103,7 @@ A PHONY command has been defined to handle commands not defined and this would d
 
 I wrote two scripts to enable new users install the  dependencies easily, if you plan to develop more.
 
-Local Docker Setup [!NOT REQUIRED FOR THE DEMO]
+Local Docker Setup 
 ---
 All docker installation steps are defined here: [set-up-docker.sh](set-up-docker.sh)
 
