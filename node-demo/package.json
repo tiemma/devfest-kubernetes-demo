@@ -24,6 +24,6 @@
   "homepage": "https://github.com/Tiemma/kafka-websockets-node#readme",
   "dependencies": {
     "express": "^4.16.4",
-    "socket.io": "^1.7.3"
+    "socket.io": "^2.4.0"
   }
 }
